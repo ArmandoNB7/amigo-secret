@@ -1,0 +1,53 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+
+export default function AmigoSecreto() {
+  const [nombre, setNombre] = useState("");
+  const [lista, setLista] = useState([]);
+  const [resultado, setResultado] = useState(null);
+
+  const agregarNombre = () => {
+    if (nombre.trim() === "") {
+      alert("Por favor, ingresa un nombre válido.");
+      return;
+    }
+    setLista([...lista, nombre.trim()]);
+    setNombre("");
+  };
+
+  const sortearAmigo = () => {
+    if (lista.length === 0) {
+      alert("La lista está vacía. Agrega nombres antes de sortear.");
+      return;
+    }
+    const indiceAleatorio = Math.floor(Math.random() * lista.length);
+    setResultado(lista[indiceAleatorio]);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4 p-4">
+      <Card className="p-4 w-full max-w-md">
+        <CardContent className="flex flex-col gap-4">
+          <Input
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholder="Ingresa un nombre"
+          />
+          <Button onClick={agregarNombre}>Adicionar</Button>
+          <ul className="list-disc pl-5">
+            {lista.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+          <Button onClick={sortearAmigo} className="bg-green-500 hover:bg-green-600">
+            Sortear Amigo
+          </Button>
+          {resultado && <p className="text-xl font-bold">Amigo Secreto: {resultado}</p>}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
